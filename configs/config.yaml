@@ -1,0 +1,79 @@
+project:
+  name: diabetes-risk-intelligence
+  random_state: 42
+
+data:
+  local_csv: data/raw/diabetes_binary_health_indicators_BRFSS2015.csv
+  archive_csv: data/archive/diabetes_binary_health_indicators_BRFSS2015.csv
+  balanced_archive_csv: data/archive/diabetes_binary_5050split_health_indicators_BRFSS2015.csv
+  multiclass_archive_csv: data/archive/diabetes_012_health_indicators_BRFSS2015.csv
+  fallback_csv: data/raw/cdc_diabetes_health_indicators.csv
+  target: Diabetes_binary
+  source:
+    uci_id: 891
+    title: CDC Diabetes Health Indicators
+    url: https://archive.ics.uci.edu/dataset/891/cdc+diabetes+health+indicators
+  split:
+    test_size: 0.20
+    validation_size: 0.20
+    stratify: true
+
+features:
+  add_domain_features: true
+  numeric_columns:
+    - BMI
+    - MentHlth
+    - PhysHlth
+  ordinal_columns:
+    - GenHlth
+    - Age
+    - Education
+    - Income
+  binary_columns:
+    - HighBP
+    - HighChol
+    - CholCheck
+    - Smoker
+    - Stroke
+    - HeartDiseaseorAttack
+    - PhysActivity
+    - Fruits
+    - Veggies
+    - HvyAlcoholConsump
+    - AnyHealthcare
+    - NoDocbcCost
+    - DiffWalk
+    - Sex
+
+training:
+  cv_folds: 5
+  n_jobs: -1
+  threshold_policy: balanced_f1
+  recall_target: 0.80
+  shap_sample_size: 600
+  calibration_sample_size: 50000
+  models:
+    logistic_regression:
+      enabled: true
+    random_forest:
+      enabled: true
+    extra_trees:
+      enabled: true
+    hist_gradient_boosting:
+      enabled: true
+    lightgbm:
+      enabled: true
+    xgboost:
+      enabled: true
+    soft_voting:
+      enabled: true
+    stacking:
+      enabled: true
+
+serving:
+  default_model: xgboost
+  artifacts_dir: artifacts
+  probability_labels:
+    low: 0.25
+    moderate: 0.50
+    high: 0.75

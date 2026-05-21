@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+artifacts/models/*.joblib
+artifacts/reports/*.png
+artifacts/reports/*.csv
+artifacts/reports/*.json
+artifacts/manifest.json
+artifacts/dataset_preview.csv
+artifacts/*.sqlite
+data/processed/
+data/raw/*.csv
+
